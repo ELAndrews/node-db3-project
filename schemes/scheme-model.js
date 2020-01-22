@@ -5,13 +5,9 @@ function find() {
 }
 
 function findById(id) {
-  if (db("schemes").whereNull(id) === null) {
-    return null;
-  } else {
-    return db("schemes")
-      .where({ id: id })
-      .first();
-  }
+  return db("schemes")
+    .where({ id: id })
+    .first();
 }
 
 function findSteps(id) {
@@ -27,14 +23,37 @@ function findSteps(id) {
     .orderBy("steps.step_number");
 }
 
-function add(scheme) {}
+async function add(scheme) {
+  try {
+    const [id] = await db("schemes").insert(scheme);
+    return findById(id);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-function update(changes, id) {}
+async function update(changes, id) {
+  try {
+    await db("schemes")
+      .where({ id: id })
+      .update(changes);
+    return findById(id);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function remove(id) {
+  return db("schemes")
+    .where({ id: id })
+    .delete();
+}
 
 module.exports = {
   find,
   findById,
   findSteps,
   add,
-  update
+  update,
+  remove
 };
