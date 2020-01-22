@@ -33,3 +33,58 @@ JOIN Customer as c
     on o.CustomerId = c.Id
 JOIN Employee as e
     on o.EmployeeId = e.Id
+
+
+
+---------------------- STRETCH ------------------- (Set within lecture)
+
+---Find the number of shipments by each shipper---
+
+SELECT s.CompanyName, COUNT(o.id) as shipments
+FROM "Order" as o
+JOIN "Shipper" as s
+    on o.ShipVia = s.id
+GROUP BY s.CompanyName
+
+---Find the top 5 best and 5 least performing employees measured in number of orders---
+
+------ 5 Best
+
+SELECT e.FirstName, e.LastName, COUNT(o.id) as Number_of_Orders
+FROM "Order" as o
+JOIN "Employee" as e
+    on o.EmployeeId = e.Id
+GROUP BY e.LastName
+ORDER BY Number_of_Orders desc
+LIMIT 5;
+
+------ 5 Worst
+
+SELECT e.FirstName, e.LastName, COUNT(o.id) as Number_of_Orders
+FROM "Order" as o
+JOIN "Employee" as e
+    on o.EmployeeId = e.Id
+GROUP BY e.LastName
+ORDER BY Number_of_Orders asc
+LIMIT 5;
+
+---Find the top 5 best performing employees measured in revenue---
+
+SELECT e.FirstName as Employee, SUM((od.UnitPrice*od.Quantity)-od.Discount) as Revenue
+FROM "OrderDetail" as od
+JOIN "Order" as o
+    on o.id = od.OrderId
+JOIN "Employee" as e
+    on e.id = o.EmployeeId
+GROUP BY Employee
+ORDER BY Revenue desc
+LIMIT 5
+
+---Find the category that brings in the most and least revenue---
+
+
+
+---Find the customer country with the most orders---
+
+
+---Find the shipper that moves the most cheese measured in units---
